@@ -1,38 +1,30 @@
-var storedString = {}; //To store short string
-
-function makeShort(l) { // Function to generate short string
-    var size = 1;
-    if (l > 1) {
-        size = parseInt(l / 2);
+function encoder(num) {
+    const possibilities = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    num = parseInt(num, 36);
+    let res = '';
+    while (num > 0) {
+        res += possibilities[num % 62];
+        num = parseInt(num / 62)
     }
-    var newString = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < size; i++)
-        newString += possible.charAt(Math.floor(Math.random() * possible.length));
-    return newString;
+    return res.split("").reverse().join("");
 }
 
-function shortString(str) { // Function to check if new generated string is already present or not; If not present then store new one
-    var newString = makeShort(str.length);
-    while (newString in storedString) {
-        newString = makeShort(str.length);
+function decoder(encoded) {
+    const possibilities = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    q = encoded.split('');
+    index = []
+    q.forEach(element => {
+        index.push(possibilities.indexOf(element));
+    });
+    let res = index[0] * 62 + index[1];
+    for (let i = 2; i < index.length; i++) {
+        res = res * 62 + index[i];
     }
-    storedString[newString] = str;
-    return newString;
+    return res.toString(36);
 }
 
-function getOriginalString(query) { // Function to get original string from their respective short string
-    if (query in storedString) {
-        return storedString[query];
-    } else {
-        return "Not Found!";
-    }
-}
+console.log(encoder('starwars')); //DKGc9xC
+console.log(decoder('DKGc9xC')); //starwars
 
-var str1 = "hello world"; // Example string 1
-var str2 = "hello terribly tiny tales"; // Example string 2
-var shortStr1 = shortString(str1); // Short string of example string 1
-var shortStr2 = shortString(str2); // Short string of example string 2
-console.log(storedString); // Print all stored strings with their short strings
-console.log(getOriginalString(shortStr1)); // Print original string from short string
-console.log(getOriginalString(shortStr2)); // Print original string from short string
+// length of starwars is 8
+// length of DKGc9xC is 7
