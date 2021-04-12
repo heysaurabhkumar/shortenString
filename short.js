@@ -4,7 +4,7 @@ function encoder(num) {
     let res = '';
     while (num > 0) {
         res += possibilities[num % 62];
-        num = parseInt(num / 62)
+        num = parseInt(num / 62);
     }
     return res.split("").reverse().join("");
 }
@@ -12,7 +12,7 @@ function encoder(num) {
 function decoder(encoded) {
     const possibilities = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     q = encoded.split('');
-    index = []
+    index = [];
     q.forEach(element => {
         index.push(possibilities.indexOf(element));
     });
